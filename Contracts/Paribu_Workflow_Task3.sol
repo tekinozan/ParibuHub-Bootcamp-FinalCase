@@ -18,7 +18,7 @@ contract Paribuhub {
 
     function getAllAdmins() public view returns (Account[] memory) {
         Account[] memory _admins = new Account[](admins.length);
-        for (uint256 i = 0; i < index; i++) {
+        for (uint256 i = 0; i < admins.length; i++) {
             _admins[i] = admins[i];
         }
 
