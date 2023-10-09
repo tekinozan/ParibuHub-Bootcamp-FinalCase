@@ -3,31 +3,25 @@
 pragma solidity >=0.7.0 <0.9.0;
 
 contract Paribuhub {
-
     struct Account {
         string name;
         string surname;
-        uint balance;
+        uint256 balance;
     }
 
-    Account[] admins;
-    uint private index;
+    Account[] public admins;
+    uint256 public index;
 
     function addAdmin(Account memory admin) public {
-        admins[index++] = admin;
+        admins.push(admin);
     }
 
+    function getAllAdmins() public view returns (Account[] memory) {
+        Account[] memory _admins = new Account[](admins.length);
+        for (uint256 i = 0; i < index; i++) {
+            _admins[i] = admins[i];
+        }
 
-    function getAllAdmins() public view returns(Account[] memory) {
-    Account[] memory _admins = new Account[](index);
-    for(uint i=0;i<admins.Lenght;i++){
-        _admins[i] = admins[i];
+        return _admins;
     }
-
-    return _admins;
 }
-
-
-}
-
-
