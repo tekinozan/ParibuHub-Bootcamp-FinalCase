@@ -87,9 +87,9 @@ contract RentalContract {
         emit PropertyRented(msg.sender, _propertyType, _addressLocation, _rentalStartDate, _rentalEndDate);
     }
     
-    function rentProperty(PropertyType _propertyType, string memory _addressLocation) public {
+    function rentProperty(PropertyType _propertyType, string memory _addressLocation) public onlyOwner {
         for (uint256 i = 0; i < properties.length; i++) {
-            if (properties[i].ownerAddress == msg.sender && properties[i].propertyType == _propertyType && keccak256(abi.encodePacked(properties[i].addressLocation)) == keccak256(abi.encodePacked(_addressLocation)) && properties[i].status == RentalStatus.NotRented) {
+            if (properties[i].ownerAddress == msg.sender && properties[i].propertyType == _propertyType && properties[i].addressLocation == _addressLocation && properties[i].status == RentalStatus.NotRented) {
                 properties[i].status = RentalStatus.Rented;
                 tenantAuthorization[msg.sender] = true; // Kiracıyı yetkilendir
                 emit PropertyRented(msg.sender, _propertyType, _addressLocation, properties[i].rentalStartDate, properties[i].rentalEndDate);
@@ -100,7 +100,7 @@ contract RentalContract {
     
     function terminateRental(PropertyType _propertyType, string memory _addressLocation) public onlyOwner {
         for (uint256 i = 0; i < properties.length; i++) {
-            if (properties[i].ownerAddress == msg.sender && properties[i].propertyType == _propertyType && keccak256(abi.encodePacked(properties[i].addressLocation)) == keccak256(abi.encodePacked(_addressLocation)) && properties[i].status == RentalStatus.Rented) {
+            if (properties[i].ownerAddress == msg.sender && properties[i].propertyType == _propertyType && properties[i].addressLocation == _addressLocation && properties[i].status == RentalStatus.Rented) {
                 properties[i].status = RentalStatus.NotRented;
                 tenantAuthorization[msg.sender] = false; // Kiracının yetkilendirmesini kaldır
                 emit RentalTerminated(msg.sender, _propertyType, _addressLocation);
@@ -111,7 +111,7 @@ contract RentalContract {
     
     function reportIssue(PropertyType _propertyType, string memory _addressLocation, string memory _issueDescription) public onlyTenant {
         for (uint256 i = 0; i < properties.length; i++) {
-            if (properties[i].propertyType == _propertyType && keccak256(abi.encodePacked(properties[i].addressLocation)) == keccak256(abi.encodePacked(_addressLocation)) && properties[i].status == RentalStatus.Rented) {
+            if (properties[i].propertyType == _propertyType && properties[i].addressLocation == _addressLocation && properties[i].status == RentalStatus.Rented) {
                 Report memory newReport = Report(msg.sender, _propertyType, _addressLocation, _issueDescription);
                 reports.push(newReport);
                 emit ReportSubmitted(msg.sender, _propertyType, _addressLocation, _issueDescription);
