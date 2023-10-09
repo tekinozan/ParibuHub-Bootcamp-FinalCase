@@ -9,11 +9,11 @@ contract Paribuhub {
         uint256 balance;
     }
 
-    Account[] public admins;
+    Account[] admins;
     uint256 public index;
 
     function addAdmin(Account memory admin) public {
-        admins.push(admin);
+        admins[index++] = admin;
     }
 
     function getAllAdmins() public view returns (Account[] memory) {
