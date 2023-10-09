@@ -14,7 +14,6 @@ contract Paribuhub {
     uint private index;
 
     function addAdmin(Account memory admin) public {
-       require(index<3, "Has no slot");
         admins[index++] = admin;
     }
 
